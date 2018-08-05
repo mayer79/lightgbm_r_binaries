@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Load LightGBM model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for lgb.load {lightgbm}"><tr><td>lgb.load {lightgbm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Load LightGBM model</h2>
+
+<h3>Description</h3>
+
+<p>Load LightGBM model from saved model file or string
+Load LightGBM takes in either a file path or model string
+If both are provided, Load will default to loading from file
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+lgb.load(filename = NULL, model_str = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>filename</code></td>
+<td>
+<p>path of model file</p>
+</td></tr>
+<tr valign="top"><td><code>model_str</code></td>
+<td>
+<p>a str containing the model</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>lgb.Booster
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(lightgbm)
+data(agaricus.train, package = "lightgbm")
+train &lt;- agaricus.train
+dtrain &lt;- lgb.Dataset(train$data, label = train$label)
+data(agaricus.test, package = "lightgbm")
+test &lt;- agaricus.test
+dtest &lt;- lgb.Dataset.create.valid(dtrain, test$data, label = test$label)
+params &lt;- list(objective = "regression", metric = "l2")
+valids &lt;- list(test = dtest)
+model &lt;- lgb.train(params,
+                   dtrain,
+                   100,
+                   valids,
+                   min_data = 1,
+                   learning_rate = 1,
+                   early_stopping_rounds = 10)
+lgb.save(model, "model.txt")
+load_booster &lt;- lgb.load(filename = "model.txt")
+model_string &lt;- model$save_model_to_string(NULL) # saves best iteration
+load_booster_from_str &lt;- lgb.load(model_str = model_string)
+
+## End(Not run)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lightgbm</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

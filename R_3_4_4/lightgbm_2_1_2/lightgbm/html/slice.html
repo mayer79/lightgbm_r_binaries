@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Slice a dataset</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for slice {lightgbm}"><tr><td>slice {lightgbm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Slice a dataset</h2>
+
+<h3>Description</h3>
+
+<p>Get a new <code>lgb.Dataset</code> containing the specified rows of
+orginal lgb.Dataset object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+slice(dataset, ...)
+
+## S3 method for class 'lgb.Dataset'
+slice(dataset, idxset, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>dataset</code></td>
+<td>
+<p>Object of class &quot;lgb.Dataset&quot;</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other parameters (currently not used)</p>
+</td></tr>
+<tr valign="top"><td><code>idxset</code></td>
+<td>
+<p>a integer vector of indices of rows needed</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>constructed sub dataset
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(lightgbm)
+data(agaricus.train, package = "lightgbm")
+train &lt;- agaricus.train
+dtrain &lt;- lgb.Dataset(train$data, label = train$label)
+
+dsub &lt;- lightgbm::slice(dtrain, 1:42)
+labels &lt;- lightgbm::getinfo(dsub, "label")
+
+## End(Not run)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lightgbm</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

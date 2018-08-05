@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: saveRDS for lgb.Booster models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for saveRDS.lgb.Booster {lightgbm}"><tr><td>saveRDS.lgb.Booster {lightgbm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>saveRDS for lgb.Booster models</h2>
+
+<h3>Description</h3>
+
+<p>Attemps to save a model using RDS. Has an additional parameter (<code>raw</code>) which decides whether to save the raw model or not.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+saveRDS.lgb.Booster(object, file = "", ascii = FALSE, version = NULL,
+  compress = TRUE, refhook = NULL, raw = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+<p>R object to serialize.</p>
+</td></tr>
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>a connection or the name of the file where the R object is saved to or read from.</p>
+</td></tr>
+<tr valign="top"><td><code>ascii</code></td>
+<td>
+<p>a logical. If TRUE or NA, an ASCII representation is written; otherwise (default), a binary one is used. See the comments in the help for save.</p>
+</td></tr>
+<tr valign="top"><td><code>version</code></td>
+<td>
+<p>the workspace format version to use. <code>NULL</code> specifies the current default version (2). Versions prior to 2 are not supported, so this will only be relevant when there are later versions.</p>
+</td></tr>
+<tr valign="top"><td><code>compress</code></td>
+<td>
+<p>a logical specifying whether saving to a named file is to use &quot;gzip&quot; compression, or one of <code>"gzip"</code>, <code>"bzip2"</code> or <code>"xz"</code> to indicate the type of compression to be used. Ignored if file is a connection.</p>
+</td></tr>
+<tr valign="top"><td><code>refhook</code></td>
+<td>
+<p>a hook function for handling reference objects.</p>
+</td></tr>
+<tr valign="top"><td><code>raw</code></td>
+<td>
+<p>whether to save the model in a raw variable or not, recommended to leave it to <code>TRUE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>NULL invisibly.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(lightgbm)
+data(agaricus.train, package = "lightgbm")
+train &lt;- agaricus.train
+dtrain &lt;- lgb.Dataset(train$data, label = train$label)
+data(agaricus.test, package = "lightgbm")
+test &lt;- agaricus.test
+dtest &lt;- lgb.Dataset.create.valid(dtrain, test$data, label = test$label)
+params &lt;- list(objective = "regression", metric = "l2")
+valids &lt;- list(test = dtest)
+model &lt;- lgb.train(params,
+                   dtrain,
+                   100,
+                   valids,
+                   min_data = 1,
+                   learning_rate = 1,
+                   early_stopping_rounds = 10)
+saveRDS.lgb.Booster(model, "model.rds")
+
+## End(Not run)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lightgbm</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

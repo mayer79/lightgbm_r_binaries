@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Parse a LightGBM model json dump</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for lgb.model.dt.tree {lightgbm}"><tr><td>lgb.model.dt.tree {lightgbm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Parse a LightGBM model json dump</h2>
+
+<h3>Description</h3>
+
+<p>Parse a LightGBM model json dump into a <code>data.table</code> structure.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+lgb.model.dt.tree(model, num_iteration = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>model</code></td>
+<td>
+<p>object of class <code>lgb.Booster</code></p>
+</td></tr>
+<tr valign="top"><td><code>num_iteration</code></td>
+<td>
+<p>number of iterations you want to predict with. NULL or 
+&lt;= 0 means use best iteration</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A <code>data.table</code> with detailed information about model trees' nodes and leafs.
+</p>
+<p>The columns of the <code>data.table</code> are:
+</p>
+
+<ul>
+<li> <p><code>tree_index</code>: ID of a tree in a model (integer)
+</p>
+</li>
+<li> <p><code>split_index</code>: ID of a node in a tree (integer)
+</p>
+</li>
+<li> <p><code>split_feature</code>: for a node, it's a feature name (character);
+for a leaf, it simply labels it as <code>"NA"</code>
+</p>
+</li>
+<li> <p><code>node_parent</code>: ID of the parent node for current node (integer)
+</p>
+</li>
+<li> <p><code>leaf_index</code>: ID of a leaf in a tree (integer)
+</p>
+</li>
+<li> <p><code>leaf_parent</code>: ID of the parent node for current leaf (integer)
+</p>
+</li>
+<li> <p><code>split_gain</code>: Split gain of a node
+</p>
+</li>
+<li> <p><code>threshold</code>: Spliting threshold value of a node
+</p>
+</li>
+<li> <p><code>decision_type</code>: Decision type of a node
+</p>
+</li>
+<li> <p><code>default_left</code>: Determine how to handle NA value, TRUE -&gt; Left, FALSE -&gt; Right
+</p>
+</li>
+<li> <p><code>internal_value</code>: Node value
+</p>
+</li>
+<li> <p><code>internal_count</code>: The number of observation collected by a node
+</p>
+</li>
+<li> <p><code>leaf_value</code>: Leaf value
+</p>
+</li>
+<li> <p><code>leaf_count</code>: The number of observation collected by a leaf
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(lightgbm)
+
+data(agaricus.train, package = "lightgbm")
+train &lt;- agaricus.train
+dtrain &lt;- lgb.Dataset(train$data, label = train$label)
+
+params = list(objective = "binary",
+              learning_rate = 0.01, num_leaves = 63, max_depth = -1,
+              min_data_in_leaf = 1, min_sum_hessian_in_leaf = 1)
+              model &lt;- lgb.train(params, dtrain, 20)
+model &lt;- lgb.train(params, dtrain, 20)
+
+tree_dt &lt;- lgb.model.dt.tree(model)
+
+## End(Not run)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lightgbm</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

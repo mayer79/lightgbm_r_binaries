@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Main CV logic for LightGBM</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for lgb.cv {lightgbm}"><tr><td>lgb.cv {lightgbm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Main CV logic for LightGBM</h2>
+
+<h3>Description</h3>
+
+<p>Simple interface for training an lightgbm model.
+Its documentation is combined with lgb.train.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+lgb.cv(params = list(), data, nrounds = 10, nfold = 3, label = NULL,
+  weight = NULL, obj = NULL, eval = NULL, verbose = 1, record = TRUE,
+  eval_freq = 1L, showsd = TRUE, stratified = TRUE, folds = NULL,
+  init_model = NULL, colnames = NULL, categorical_feature = NULL,
+  early_stopping_rounds = NULL, callbacks = list(), ...)
+
+lgb.train(params = list(), data, nrounds = 10, valids = list(),
+  obj = NULL, eval = NULL, verbose = 1, record = TRUE, eval_freq = 1L,
+  init_model = NULL, colnames = NULL, categorical_feature = NULL,
+  early_stopping_rounds = NULL, callbacks = list(), reset_data = FALSE,
+  ...)
+
+lightgbm(data, label = NULL, weight = NULL, params = list(),
+  nrounds = 10, verbose = 1, eval_freq = 1L,
+  early_stopping_rounds = NULL, save_name = "lightgbm.model",
+  init_model = NULL, callbacks = list(), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>params</code></td>
+<td>
+<p>List of parameters</p>
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a <code>lgb.Dataset</code> object, used for CV</p>
+</td></tr>
+<tr valign="top"><td><code>nrounds</code></td>
+<td>
+<p>number of CV rounds</p>
+</td></tr>
+<tr valign="top"><td><code>nfold</code></td>
+<td>
+<p>the original dataset is randomly partitioned into <code>nfold</code> equal size subsamples.</p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>vector of response values. Should be provided only when data is an R-matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>weight</code></td>
+<td>
+<p>vector of response values. If not NULL, will set to dataset</p>
+</td></tr>
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>objective function, can be character or custom objective function. Examples include 
+<code>regression</code>, <code>regression_l1</code>, <code>huber</code>,
+<code>binary</code>, <code>lambdarank</code>, <code>multiclass</code>, <code>multiclass</code></p>
+</td></tr>
+<tr valign="top"><td><code>eval</code></td>
+<td>
+<p>evaluation function, can be (list of) character or custom eval function</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>verbosity for output, if &lt;= 0, also will disable the print of evalutaion during training</p>
+</td></tr>
+<tr valign="top"><td><code>record</code></td>
+<td>
+<p>Boolean, TRUE will record iteration message to <code>booster$record_evals</code></p>
+</td></tr>
+<tr valign="top"><td><code>eval_freq</code></td>
+<td>
+<p>evalutaion output frequence, only effect when verbose &gt; 0</p>
+</td></tr>
+<tr valign="top"><td><code>showsd</code></td>
+<td>
+<p><code>boolean</code>, whether to show standard deviation of cross validation</p>
+</td></tr>
+<tr valign="top"><td><code>stratified</code></td>
+<td>
+<p>a <code>boolean</code> indicating whether sampling of folds should be stratified
+by the values of outcome labels.</p>
+</td></tr>
+<tr valign="top"><td><code>folds</code></td>
+<td>
+<p><code>list</code> provides a possibility to use a list of pre-defined CV folds
+(each element must be a vector of test fold's indices). When folds are supplied,
+the <code>nfold</code> and <code>stratified</code> parameters are ignored.</p>
+</td></tr>
+<tr valign="top"><td><code>init_model</code></td>
+<td>
+<p>path of model file of <code>lgb.Booster</code> object, will continue train from this model</p>
+</td></tr>
+<tr valign="top"><td><code>colnames</code></td>
+<td>
+<p>feature names, if not null, will use this to overwrite the names in dataset</p>
+</td></tr>
+<tr valign="top"><td><code>categorical_feature</code></td>
+<td>
+<p>list of str or int
+type int represents index,
+type str represents feature names</p>
+</td></tr>
+<tr valign="top"><td><code>early_stopping_rounds</code></td>
+<td>
+<p>int
+Activates early stopping.
+Requires at least one validation data and one metric
+If there's more than one, will check all of them except the training data
+Returns the model with (best_iter + early_stopping_rounds)
+If early stopping occurs, the model will have 'best_iter' field</p>
+</td></tr>
+<tr valign="top"><td><code>callbacks</code></td>
+<td>
+<p>list of callback functions
+List of callback functions that are applied at each iteration.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other parameters, see Parameters.rst for more informations</p>
+</td></tr>
+<tr valign="top"><td><code>valids</code></td>
+<td>
+<p>a list of <code>lgb.Dataset</code> objects, used for validation</p>
+</td></tr>
+<tr valign="top"><td><code>reset_data</code></td>
+<td>
+<p>Boolean, setting it to TRUE (not the default value) will transform the booster model into a predictor model which frees up memory and the original datasets</p>
+</td></tr>
+<tr valign="top"><td><code>boosting</code></td>
+<td>
+<p>boosting type. <code>gbdt</code>, <code>dart</code></p>
+</td></tr>
+<tr valign="top"><td><code>num_leaves</code></td>
+<td>
+<p>number of leaves in one tree. defaults to 127</p>
+</td></tr>
+<tr valign="top"><td><code>max_depth</code></td>
+<td>
+<p>Limit the max depth for tree model. This is used to deal with overfit when #data is small. 
+Tree still grow by leaf-wise.</p>
+</td></tr>
+<tr valign="top"><td><code>num_threads</code></td>
+<td>
+<p>Number of threads for LightGBM. For the best speed, set this to the number of real CPU cores, not the number of threads (most CPU using hyper-threading to generate 2 threads per CPU core).</p>
+</td></tr>
+<tr valign="top"><td><code>params</code></td>
+<td>
+<p>List of parameters</p>
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a <code>lgb.Dataset</code> object, used for training</p>
+</td></tr>
+<tr valign="top"><td><code>nrounds</code></td>
+<td>
+<p>number of training rounds</p>
+</td></tr>
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>objective function, can be character or custom objective function. Examples include 
+<code>regression</code>, <code>regression_l1</code>, <code>huber</code>,
+<code>binary</code>, <code>lambdarank</code>, <code>multiclass</code>, <code>multiclass</code></p>
+</td></tr>
+<tr valign="top"><td><code>boosting</code></td>
+<td>
+<p>boosting type. <code>gbdt</code>, <code>dart</code></p>
+</td></tr>
+<tr valign="top"><td><code>num_leaves</code></td>
+<td>
+<p>number of leaves in one tree. defaults to 127</p>
+</td></tr>
+<tr valign="top"><td><code>max_depth</code></td>
+<td>
+<p>Limit the max depth for tree model. This is used to deal with overfit when #data is small. 
+Tree still grow by leaf-wise.</p>
+</td></tr>
+<tr valign="top"><td><code>num_threads</code></td>
+<td>
+<p>Number of threads for LightGBM. For the best speed, set this to the number of real CPU cores, not the number of threads (most CPU using hyper-threading to generate 2 threads per CPU core).</p>
+</td></tr>
+<tr valign="top"><td><code>eval</code></td>
+<td>
+<p>evaluation function, can be (a list of) character or custom eval function</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>verbosity for output, if &lt;= 0, also will disable the print of evalutaion during training</p>
+</td></tr>
+<tr valign="top"><td><code>record</code></td>
+<td>
+<p>Boolean, TRUE will record iteration message to <code>booster$record_evals</code></p>
+</td></tr>
+<tr valign="top"><td><code>eval_freq</code></td>
+<td>
+<p>evalutaion output frequency, only effect when verbose &gt; 0</p>
+</td></tr>
+<tr valign="top"><td><code>init_model</code></td>
+<td>
+<p>path of model file of <code>lgb.Booster</code> object, will continue training from this model</p>
+</td></tr>
+<tr valign="top"><td><code>colnames</code></td>
+<td>
+<p>feature names, if not null, will use this to overwrite the names in dataset</p>
+</td></tr>
+<tr valign="top"><td><code>categorical_feature</code></td>
+<td>
+<p>list of str or int
+type int represents index,
+type str represents feature names</p>
+</td></tr>
+<tr valign="top"><td><code>early_stopping_rounds</code></td>
+<td>
+<p>int
+Activates early stopping.
+Requires at least one validation data and one metric
+If there's more than one, will check all of them except the training data
+Returns the model with (best_iter + early_stopping_rounds)
+If early stopping occurs, the model will have 'best_iter' field</p>
+</td></tr>
+<tr valign="top"><td><code>callbacks</code></td>
+<td>
+<p>list of callback functions
+List of callback functions that are applied at each iteration.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other parameters, see Parameters.rst for more informations</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a trained model <code>lgb.CVBooster</code>.
+</p>
+<p>a trained booster model <code>lgb.Booster</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(lightgbm)
+data(agaricus.train, package = "lightgbm")
+train &lt;- agaricus.train
+dtrain &lt;- lgb.Dataset(train$data, label = train$label)
+params &lt;- list(objective = "regression", metric = "l2")
+model &lt;- lgb.cv(params,
+                dtrain,
+                10,
+                nfold = 5,
+                min_data = 1,
+                learning_rate = 1,
+                early_stopping_rounds = 10)
+
+## End(Not run)
+## Not run: 
+library(lightgbm)
+data(agaricus.train, package = "lightgbm")
+train &lt;- agaricus.train
+dtrain &lt;- lgb.Dataset(train$data, label = train$label)
+data(agaricus.test, package = "lightgbm")
+test &lt;- agaricus.test
+dtest &lt;- lgb.Dataset.create.valid(dtrain, test$data, label = test$label)
+params &lt;- list(objective = "regression", metric = "l2")
+valids &lt;- list(test = dtest)
+model &lt;- lgb.train(params,
+                   dtrain,
+                   100,
+                   valids,
+                   min_data = 1,
+                   learning_rate = 1,
+                   early_stopping_rounds = 10)
+
+## End(Not run)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lightgbm</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

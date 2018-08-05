@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Predict method for LightGBM model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for predict.lgb.Booster {lightgbm}"><tr><td>predict.lgb.Booster {lightgbm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Predict method for LightGBM model</h2>
+
+<h3>Description</h3>
+
+<p>Predicted values based on class <code>lgb.Booster</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'lgb.Booster'
+predict(object, data, num_iteration = NULL,
+  rawscore = FALSE, predleaf = FALSE, header = FALSE, reshape = FALSE,
+  ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+<p>Object of class <code>lgb.Booster</code></p>
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a <code>matrix</code> object, a <code>dgCMatrix</code> object or a character representing a filename</p>
+</td></tr>
+<tr valign="top"><td><code>num_iteration</code></td>
+<td>
+<p>number of iteration want to predict with, NULL or &lt;= 0 means use best iteration</p>
+</td></tr>
+<tr valign="top"><td><code>rawscore</code></td>
+<td>
+<p>whether the prediction should be returned in the for of original untransformed
+sum of predictions from boosting iterations' results. E.g., setting <code>rawscore=TRUE</code> for
+logistic regression would result in predictions for log-odds instead of probabilities.</p>
+</td></tr>
+<tr valign="top"><td><code>predleaf</code></td>
+<td>
+<p>whether predict leaf index instead.</p>
+</td></tr>
+<tr valign="top"><td><code>header</code></td>
+<td>
+<p>only used for prediction for text file. True if text file has header</p>
+</td></tr>
+<tr valign="top"><td><code>reshape</code></td>
+<td>
+<p>whether to reshape the vector of predictions to a matrix form when there are several
+prediction outputs per case.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional named arguments passed to the <code>predict()</code> method of
+the <code>lgb.Booster</code> object passed to <code>object</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>For regression or binary classification, it returns a vector of length <code>nrows(data)</code>.
+For multiclass classification, either a <code>num_class * nrows(data)</code> vector or
+a <code>(nrows(data), num_class)</code> dimension matrix is returned, depending on
+the <code>reshape</code> value.
+</p>
+<p>When <code>predleaf = TRUE</code>, the output is a matrix object with the
+number of columns corresponding to the number of trees.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(lightgbm)
+data(agaricus.train, package = "lightgbm")
+train &lt;- agaricus.train
+dtrain &lt;- lgb.Dataset(train$data, label = train$label)
+data(agaricus.test, package = "lightgbm")
+test &lt;- agaricus.test
+dtest &lt;- lgb.Dataset.create.valid(dtrain, test$data, label = test$label)
+params &lt;- list(objective = "regression", metric = "l2")
+valids &lt;- list(test = dtest)
+model &lt;- lgb.train(params,
+                   dtrain,
+                   100,
+                   valids,
+                   min_data = 1,
+                   learning_rate = 1,
+                   early_stopping_rounds = 10)
+preds &lt;- predict(model, test$data)
+
+## End(Not run)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lightgbm</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

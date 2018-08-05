@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get record evaluation result from booster</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for lgb.get.eval.result {lightgbm}"><tr><td>lgb.get.eval.result {lightgbm}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get record evaluation result from booster</h2>
+
+<h3>Description</h3>
+
+<p>Get record evaluation result from booster
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+lgb.get.eval.result(booster, data_name, eval_name, iters = NULL,
+  is_err = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>booster</code></td>
+<td>
+<p>Object of class <code>lgb.Booster</code></p>
+</td></tr>
+<tr valign="top"><td><code>data_name</code></td>
+<td>
+<p>name of dataset</p>
+</td></tr>
+<tr valign="top"><td><code>eval_name</code></td>
+<td>
+<p>name of evaluation</p>
+</td></tr>
+<tr valign="top"><td><code>iters</code></td>
+<td>
+<p>iterations, NULL will return all</p>
+</td></tr>
+<tr valign="top"><td><code>is_err</code></td>
+<td>
+<p>TRUE will return evaluation error instead</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>vector of evaluation result
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(lightgbm)
+data(agaricus.train, package = "lightgbm")
+train &lt;- agaricus.train
+dtrain &lt;- lgb.Dataset(train$data, label = train$label)
+data(agaricus.test, package = "lightgbm")
+test &lt;- agaricus.test
+dtest &lt;- lgb.Dataset.create.valid(dtrain, test$data, label = test$label)
+params &lt;- list(objective = "regression", metric = "l2")
+valids &lt;- list(test = dtest)
+model &lt;- lgb.train(params,
+                   dtrain,
+                   100,
+                   valids,
+                   min_data = 1,
+                   learning_rate = 1,
+                   early_stopping_rounds = 10)
+lgb.get.eval.result(model, "test", "l2")
+
+## End(Not run)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lightgbm</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>
