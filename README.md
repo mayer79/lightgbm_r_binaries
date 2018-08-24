@@ -1,5 +1,5 @@
 # lightGBM binaries
-Binary lightGBM package for R Windows with the following relevant info
+Binary [lightGBM](https://github.com/Microsoft/LightGBM) package for R Windows with the following relevant info
 
 - Built under Windows 10
 - CPU: i7 7700 quadcore 
