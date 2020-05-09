@@ -25,6 +25,6 @@ Depending on the R version, go for one of these guys:
 
 - R 3.5.x: `install.packages("https://github.com/mayer79/lightgbm_r_binaries/raw/master/R_3_5_0/lightgbm_2_2_3/lightgbm.zip", repos = NULL)`
 
-- R 3.6.x: `install.packages("https://github.com/mayer79/lightgbm_r_binaries/raw/master/R_3_6_0/lightgbm_2_2_4/lightgbm.zip", repos = NULL)`
+- R 3.6.0: `install.packages("https://github.com/mayer79/lightgbm_r_binaries/raw/master/R_3_6_0/lightgbm_2_2_4/lightgbm.zip", repos = NULL)`
 
-- R 3.6.x: `install.packages("https://github.com/mayer79/lightgbm_r_binaries/raw/master/R_3_6_3/lightgbm_2_3_2/lightgbm.zip", repos = NULL)`
+- R 3.6.3: `install.packages("https://github.com/mayer79/lightgbm_r_binaries/raw/master/R_3_6_3/lightgbm_2_3_2/lightgbm.zip", repos = NULL)`
