@@ -21,6 +21,7 @@ and then manually zipping the installed package in the R library.
 ## Installation
 Depending on the R version, go for one of these guys:
 
+- R 4.0.3: `install.packages("https://github.com/mayer79/lightgbm_r_binaries/raw/master/R_4_0_3/lightgbm_3_2_0/lightgbm.zip", repos = NULL)`
 - R 4.0.0: `install.packages("https://github.com/mayer79/lightgbm_r_binaries/raw/master/R_4_0_0/lightgbm_2_3_2/lightgbm.zip", repos = NULL)`
 - R 3.6.3: `install.packages("https://github.com/mayer79/lightgbm_r_binaries/raw/master/R_3_6_3/lightgbm_2_3_2/lightgbm.zip", repos = NULL)`
 - R 3.6.0: `install.packages("https://github.com/mayer79/lightgbm_r_binaries/raw/master/R_3_6_0/lightgbm_2_2_4/lightgbm.zip", repos = NULL)`
